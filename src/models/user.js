@@ -5,7 +5,7 @@ const getUser = async (email) => {
     //get user hac same email
     const [user] = await db.query(`
         SELECT *
-        FROM customers 
+        FROM user 
         WHERE email = '${email}'
         LIMIT 1`);
 
@@ -16,7 +16,7 @@ const getUser = async (email) => {
 const postUser = async (full_name, email, password_hash) => {
     //get user hac same email
     const [user] = await db.query(`
-    INSERT INTO customers (full_name, email, password_hash) 
+    INSERT INTO user (ten_khachhang, email, matkhau) 
     VALUES ('${full_name}', '${email}', '${password_hash}')
     `);
 

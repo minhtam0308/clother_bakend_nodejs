@@ -1,13 +1,24 @@
+const cors = require('cors');
 const express = require("express");
 const routeUser = require("./routes/userRoute");
+const routeProduct = require("./routes/productRoute");
+const routeCate = require("./routes/cateRoute");
 const { login } = require("./controllers/authController");
+const authMiddleware = require("./middlewares/authMiddleware");
 const app = express();
+app.use(cors());
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
+//auth
+app.use('*', authMiddleware);
 //routes
 app.use("/api/user", routeUser);
+app.use("/api/pro", routeProduct);
+app.use("/api/cate", routeCate);
 
 
 

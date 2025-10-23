@@ -3,6 +3,7 @@ const user = require("../models/user");
 const bcrypt = require("bcryptjs");
 exports.Login = async (req, res) => {
     const { email, password } = req.body;
+    // console.log(req.body);
     if (!email || !password) {
         return res.json({
             EC: 1,
@@ -15,24 +16,24 @@ exports.Login = async (req, res) => {
     try {
         const [userAccount] = await user.getUser(email);
         if (!userAccount) {
-            return res.json({
+            return res.status(200).json({
                 EC: 2,
                 EM: "Email is not exist"
             })
         }
-        const isMatch = await bcrypt.compare(password, userAccount.password_hash);
+        const isMatch = await bcrypt.compare(password, userAccount.matkhau);
         if (email !== userAccount.email || !isMatch) {
             return res.json({
                 EC: 1,
                 EM: "Password wrong"
             })
         }
-        let { password_hash, ...userData } = userAccount;
+        let { matkhau, ...userData } = userAccount;
         const payload = { id: userAccount, role: userAccount.role };
         const secret = process.env.JWT_SECRET || "my-secret-key";
 
-        const accessToken = jwt.sign(payload, secret, { expiresIn: "1m" });
-        return res.json({
+        const accessToken = jwt.sign(payload, secret, { expiresIn: "300h" });
+        return res.status(200).json({
             EC: 0,
             EM: userData,
             accessToken
@@ -59,7 +60,7 @@ exports.Register = async (req, res) => {
         //kiểm tra tài khoản đã tồn tại chưa
         const [userAccount] = await user.getUser(email);
         if (userAccount) {
-            return res.json({
+            return res.status(200).json({
                 EC: 3,
                 EM: "Email was exist"
             })
@@ -86,12 +87,12 @@ exports.Register = async (req, res) => {
 
         // const accessToken = jwt.sign(payload, secret, { expiresIn: "1m" });
         if (!postInfor) {
-            return res.json({
+            return res.status(200).json({
                 EC: 2,
                 EM: "Register fail"
             })
         }
-        return res.json({
+        return res.status(200).json({
             EC: 0,
             EM: "Register success"
         })
