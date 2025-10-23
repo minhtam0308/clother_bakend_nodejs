@@ -16,7 +16,9 @@ const authMiddleware = (req, res, next) => {
         '/api/pro/postCreateProduct',
         '/api/pro/postCreateProductDetail',
         '/api/pro/putEditPro',
-        '/api/pro/delProduct'
+        '/api/pro/delProduct',
+        '/api/user/account',
+        '/api/cate/getAllCategoryByAdmin',
     ];
     // console.log(req.baseUrl);
     if (whileList.includes(req.baseUrl)) {

@@ -17,6 +17,7 @@ exports.getAllProducts = async (req, res) => {
             description: item.mota_sanpham,
             price: item.gia,
             image: item.hinhanh,
+            khuyenmai: item.phantram_khuyenmai
         })
     }
 

@@ -20,9 +20,28 @@ const getCateById = async (id) => {
     return cate;
 };
 
+const getAllCateBig = async () => {
+    const [cate] = await db.query(`
+        SELECT *
+        FROM danhmuc
+        `);
 
+    return cate;
+};
+
+const getCateByIdCateBig = async (id) => {
+    const [cate] = await db.query(`
+        SELECT *
+        FROM danhmuccon
+        where ma_danhmuc = ${id}
+        `);
+
+    return cate;
+};
 
 module.exports = {
     getAllCate,
-    getCateById
+    getCateById,
+    getAllCateBig,
+    getCateByIdCateBig
 }

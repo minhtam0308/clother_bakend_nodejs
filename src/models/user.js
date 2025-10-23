@@ -12,6 +12,17 @@ const getUser = async (email) => {
     return user;
 };
 
+
+const getAllUser = async () => {
+    //get user hac same email
+    const [user] = await db.query(`
+        SELECT *
+        FROM user 
+        `);
+
+    return user;
+};
+
 // Lấy tất cả user
 const postUser = async (full_name, email, password_hash) => {
     //get user hac same email
@@ -25,5 +36,6 @@ const postUser = async (full_name, email, password_hash) => {
 
 module.exports = {
     getUser,
-    postUser
+    postUser,
+    getAllUser
 }

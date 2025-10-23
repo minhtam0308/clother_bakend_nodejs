@@ -54,7 +54,7 @@ const postCreatePro = async (tensp, hinhanh, gia, mota_sanpham, phantram_khuyenm
         INSERT INTO sanpham 
         (tensp, hinhanh, gia, mota_sanpham, phantram_khuyenmai, ma_dmc)
         VALUES
-        ('${tensp}', ${hinhanh}, ${gia}, '${mota_sanpham}', ${phantram_khuyenmai}, ${ma_dmc});
+        ('${tensp}', '${hinhanh}', ${gia}, '${mota_sanpham}', '${phantram_khuyenmai}', ${ma_dmc});
         `);
     return product.insertId;
 };
