@@ -18,7 +18,16 @@ const authMiddleware = (req, res, next) => {
         '/api/pro/putEditPro',
         '/api/pro/delProduct',
         '/api/user/account',
+        '/api/user/uplevel',
+        '/api/user/putEditBanUser',
+        '/api/user/deleteUser',
         '/api/cate/getAllCategoryByAdmin',
+        '/api/cate/postCreateCateBig',
+        '/api/cate/putEditCateBig',
+        '/api/cate/deleteCateBig',
+        '/api/cate/postCreateCate',
+        '/api/cate/putEditCate',
+        '/api/cate/deleteCate',
     ];
     // console.log(req.baseUrl);
     if (whileList.includes(req.baseUrl)) {
@@ -37,6 +46,7 @@ const authMiddleware = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || "my-secret-key");
         req.user = decoded;
+        // console.log(req.user)
         if (adminList.includes(req.baseUrl)) {
             if (decoded.role !== 'admin') {
                 return res.json({

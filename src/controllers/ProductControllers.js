@@ -68,29 +68,9 @@ exports.getProductsById = async (req, res) => {
 };
 
 exports.getProductsByCate = async (req, res) => {
-    const { idCate } = req.query;
-    // console.log(req)
-    if (!idCate) {
-        return res.status(200).json({
-            EC: 1,
-            EM: "ID"
-        })
-    }
-    try {
-        const results = await getProbycate(idCate);
-        // console.log(results)
-        return res.json(results);
-    } catch (err) {
-        return res.status(500);
-    }
-
-};
-
-
-exports.getProductsByCate = async (req, res) => {
-    const { idCate } = req.query;
-    // console.log(req)
-    if (!idCate) {
+    const { idCate, tendm } = req.query;
+    // console.log(req.query)
+    if (!idCate || !tendm) {
         return res.status(200).json({
             EC: 1,
             EM: "ID"
@@ -98,13 +78,27 @@ exports.getProductsByCate = async (req, res) => {
     }
     try {
         const [results] = await getProbycate(idCate);
+        let result = [];
+        for (const item of results) {
+            result.push({
+                id: item.masp,
+                name: item.tensp,
+                category: tendm,
+                description: item.mota_sanpham,
+                price: item.gia,
+                image: item.hinhanh,
+                khuyenmai: item.phantram_khuyenmai
+            })
+        }
         // console.log(results)
-        return res.json(results);
+        return res.json(result);
     } catch (err) {
         return res.status(500);
     }
 
 };
+
+
 
 exports.getProductsByName = async (req, res) => {
     const { name } = req.body;
