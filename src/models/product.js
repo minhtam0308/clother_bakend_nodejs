@@ -60,9 +60,9 @@ const postCreatePro = async (tensp, hinhanh, gia, mota_sanpham, phantram_khuyenm
 };
 const postCreateProDetail = async (masp, kich_co, mausac, soluong_trongkho, anh) => {
     const [product] = await db.query(`
-        INSERT INTO sanphambt (masp, kich_co, mausac, soluong_trongkho, anh, gia_sanpham)
+        INSERT INTO sanphambt (masp, kich_co, mausac, soluong_trongkho, anh)
         VALUES
-        (${masp}, '${kich_co}', '${mausac}', ${soluong_trongkho}, ${anh}}),
+        (${masp}, '${kich_co}', '${mausac}', ${soluong_trongkho}, '${anh}')
         `);
     return product.insertId;
 };
@@ -80,18 +80,27 @@ const delPro = async (id) => {
         `);
     return product;
 };
-const putEditProDetail = async (masp, kich_co, mausac, soluong_trongkho, anh) => {
+const putEditProDetail = async (mabt, kich_co, mausac, soluong_trongkho, anh) => {
     const [product] = await db.query(`
-        INSERT INTO sanphambt (masp, kich_co, mausac, soluong_trongkho, anh, gia_sanpham)
-        VALUES
-        (${masp}, '${kich_co}', '${mausac}', ${soluong_trongkho}, ${anh}}),
+        UPDATE sanphambt 
+        SET kich_co='${kich_co}', mausac='${mausac}', soluong_trongkho=${soluong_trongkho}, anh='${anh}'
+        WHERE
+        mabt=${mabt}
         `);
     return product.insertId;
+};
+const delProDetail = async (id) => {
+    const [product] = await db.query(`
+        DELETE FROM sanphambt WHERE mabt = ${id};
+        `);
+    return product;
 };
 module.exports = {
     getAllPro, getDetaiProbyid,
     getProbyid, getProbycate,
     getProbyname, postCreatePro,
     postCreateProDetail,
-    putEditPro, delPro
+    putEditPro, delPro,
+    putEditProDetail,
+    delProDetail
 }

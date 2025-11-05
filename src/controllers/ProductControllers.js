@@ -1,5 +1,5 @@
 const { getCateById } = require("../models/category");
-const { getAllPro, getDetaiProbyid, getProbyid, getProbycate, getProbyname, postCreatePro, postCreateProDetail, putEditPro, delPro } = require("../models/product");
+const { getAllPro, getDetaiProbyid, getProbyid, getProbycate, getProbyname, postCreatePro, postCreateProDetail, putEditPro, delPro, putEditProDetail, delProDetail } = require("../models/product");
 
 exports.getAllProducts = async (req, res) => {
     const results = await getAllPro();
@@ -38,8 +38,10 @@ exports.getDetailProductsById = async (req, res) => {
     }
 
     try {
-        const results = await getDetaiProbyid(id);
-        // console.log(results)
+        const resultsDetail = await getDetaiProbyid(id);
+        const [resultPro] = await getProbyid(id);
+        // console.log(resultPro)
+        results = { pro: resultPro, detail: resultsDetail }
         return res.json(results);
     } catch (err) {
         return res.status(500);
@@ -207,6 +209,62 @@ exports.delProduct = async (req, res) => {
 
     try {
         const results = await delPro(id);
+        return res.json(results);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+
+};
+
+exports.postCreateDetailPro = async (req, res) => {
+    let { idParent, image, size, color, quantity } = req.body;
+    if (!idParent || !image || !size || !color || !quantity) {
+        return res.status(200).json({
+            EC: 1,
+            EM: "not enought"
+        })
+    }
+
+    try {
+        const results = await postCreateProDetail(idParent, size, color, quantity, image);
+        return res.json(results);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+
+};
+
+exports.putDetailPro = async (req, res) => {
+    let { id, image, size, color, quantity } = req.body;
+    if (!id || !image || !size || !color || !quantity) {
+        return res.status(200).json({
+            EC: 1,
+            EM: "not enought"
+        })
+    }
+
+    try {
+        const results = await putEditProDetail(id, size, color, quantity, image);
+        return res.json(results);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+
+};
+exports.delDetailPro = async (req, res) => {
+    let { id } = req.query;
+    if (!id) {
+        return res.status(200).json({
+            EC: 1,
+            EM: "ID"
+        })
+    }
+
+    try {
+        const results = await delProDetail(id);
         return res.json(results);
     } catch (err) {
         console.log(err);
