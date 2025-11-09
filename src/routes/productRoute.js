@@ -3,9 +3,11 @@ const router = express.Router();
 const productController = require("../controllers/ProductControllers");
 
 router.get("/getAllPro", productController.getAllProducts)
+router.get("/getAllProByClient", productController.getAllProByClient)
 router.get("/getDetailProductsById", productController.getDetailProductsById)
 router.get("/getProductsById", productController.getProductsById)
 router.get("/getProductsByCate", productController.getProductsByCate)
+router.get("/getSumProduct", productController.getSumProduct)
 router.post("/getProductsByName", productController.getProductsByName)
 router.post("/postCreateProduct", productController.postCreateProduct)
 router.post("/postCreateProductDetail", productController.postCreateProductDetail)

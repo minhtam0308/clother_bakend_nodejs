@@ -3,8 +3,10 @@ const db = require("../config/db");
 
 const getAllPro = async () => {
     const [product] = await db.query(`
-        SELECT *
-        FROM sanpham
+        SELECT s.*, COALESCE(SUM(sbt.soluong_trongkho), 0) AS total_stock 
+        FROM sanpham s
+        LEFT JOIN sanphambt sbt ON s.masp = sbt.masp
+        GROUP BY s.masp;
         `);
 
     return product;
@@ -33,9 +35,10 @@ const getProbyid = async (id) => {
 const getProbycate = async (idCate) => {
 
     const product = await db.query(`
-        SELECT *
-        FROM sanpham
-        Where ma_dmc = ${idCate}
+        SELECT DISTINCT s.*
+        FROM sanpham s
+        INNER JOIN sanphambt sbt ON s.masp = sbt.masp
+        Where s.ma_dmc = ${idCate}
         `);
     return product;
 };
@@ -89,12 +92,49 @@ const putEditProDetail = async (mabt, kich_co, mausac, soluong_trongkho, anh) =>
         `);
     return product.insertId;
 };
+
 const delProDetail = async (id) => {
     const [product] = await db.query(`
         DELETE FROM sanphambt WHERE mabt = ${id};
         `);
     return product;
 };
+
+const getAllProClient = async () => {
+    const [product] = await db.query(`
+        SELECT DISTINCT s.*
+        FROM sanpham s
+        INNER JOIN sanphambt sbt ON s.masp = sbt.masp
+        `);
+    return product;
+};
+
+const getSumProapi = async (masp, mausac, kichco) => {
+    // console.log(typeof kichco)
+    try {
+        // vì khi truyền bằng hàm này null truyền vào sẽ thành 'null'
+        const [product] = await db.query(`
+        SELECT SUM(soluong_trongkho) AS soluong
+        FROM sanphambt
+        WHERE masp = ?
+        AND ( ? IS NULL OR mausac = ? )
+        AND ( ? IS NULL OR kich_co = ? );
+        `, [masp, mausac, mausac, kichco, kichco]);
+        // in ra sql
+        // console.log(db.format(`
+        // SELECT SUM(soluong_trongkho) AS soluong
+        // FROM sanphambt
+        // WHERE masp = ?
+        // AND ( ? IS NULL OR mausac = ? )
+        // AND ( ? IS NULL OR kich_co = ? );
+        // `, [masp, mausac, mausac, kichco, kichco]));
+        return product;
+    } catch (e) {
+        console.log(e)
+    }
+
+};
+
 module.exports = {
     getAllPro, getDetaiProbyid,
     getProbyid, getProbycate,
@@ -102,5 +142,6 @@ module.exports = {
     postCreateProDetail,
     putEditPro, delPro,
     putEditProDetail,
-    delProDetail
+    delProDetail,
+    getAllProClient, getSumProapi
 }

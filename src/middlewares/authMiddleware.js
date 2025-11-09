@@ -1,15 +1,18 @@
 const jwt = require("jsonwebtoken");
+const { getUserByid } = require("../models/user");
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     const whileList = [
         '/api/user/login',
         "/api/user/register",
         '/api/pro/getAllPro',
+        '/api/pro/getAllProByClient',
         '/api/pro/getDetailProductsById',
         '/api/pro/getProductsById',
         '/api/cate/getAllCategory',
         '/api/pro/getProductsByCate',
         '/api/pro/getProductsByName',
+        '/api/pro/getSumProduct',
 
     ];
     const adminList = [
@@ -31,6 +34,10 @@ const authMiddleware = (req, res, next) => {
         '/api/cate/postCreateCate',
         '/api/cate/putEditCate',
         '/api/cate/deleteCate',
+        '/api/stat/GetOrdersData',
+        '/api/stat/GetStat',
+        '/api/stat/GetRevenue',
+        '/api/stat/GetCategoryData',
     ];
     // console.log(req.baseUrl);
     if (whileList.includes(req.baseUrl)) {
@@ -50,6 +57,14 @@ const authMiddleware = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || "my-secret-key");
         req.user = decoded;
         // console.log(req.user)
+        const [checkUser] = await getUserByid(req.user.id.makh);
+        if (!checkUser) {
+            return res.status(200).json({
+                EC: 1,
+                message: "User is not exist"
+            });
+        }
+        // console.log(checkUser)
         if (adminList.includes(req.baseUrl)) {
             if (decoded.role !== 'admin') {
                 return res.json({

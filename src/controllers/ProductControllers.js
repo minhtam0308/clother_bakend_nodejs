@@ -1,10 +1,11 @@
 const { getCateById } = require("../models/category");
-const { getAllPro, getDetaiProbyid, getProbyid, getProbycate, getProbyname, postCreatePro, postCreateProDetail, putEditPro, delPro, putEditProDetail, delProDetail } = require("../models/product");
+const { getAllPro, getDetaiProbyid, getProbyid, getProbycate, getProbyname, postCreatePro, postCreateProDetail, putEditPro, delPro, putEditProDetail, delProDetail, getAllProClient, getSumProapi } = require("../models/product");
 
 exports.getAllProducts = async (req, res) => {
     const results = await getAllPro();
 
     // console.log(results)
+    // return res.json(results);
 
     // Optional: format date or handle NULL values
     let result = [];
@@ -17,7 +18,8 @@ exports.getAllProducts = async (req, res) => {
             description: item.mota_sanpham,
             price: item.gia,
             image: item.hinhanh,
-            khuyenmai: item.phantram_khuyenmai
+            khuyenmai: item.phantram_khuyenmai,
+            total_stock: item.total_stock
         })
     }
 
@@ -265,6 +267,62 @@ exports.delDetailPro = async (req, res) => {
 
     try {
         const results = await delProDetail(id);
+        return res.json(results);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+
+};
+
+exports.getAllProByClient = async (req, res) => {
+    try {
+        const results = await getAllProClient();
+        let result = [];
+        for (const item of results) {
+            let categorya = await getCateById(item.ma_dmc);
+            result.push({
+                id: item.masp,
+                name: item.tensp,
+                category: categorya[0].ten_dmc,
+                description: item.mota_sanpham,
+                price: item.gia,
+                image: item.hinhanh,
+                khuyenmai: item.phantram_khuyenmai
+            })
+        }
+
+
+        return res.json(result);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+
+};
+
+exports.getSumProduct = async (req, res) => {
+    let { masp, mausac, kichco } = req.query;
+    // console.log(req.query)
+    //vì khi truyền lên biến kichco bị biến thành 'null'
+    // console.log(typeof kichco)
+    if (kichco === 'undefined') {
+        kichco = null;
+    }
+    if (mausac === 'undefined') {
+        mausac = null;
+    }
+
+    if (!masp) {
+        return res.json({
+            EC: 1,
+            EM: "masp"
+        })
+    }
+    try {
+        const [results] = await getSumProapi(masp, mausac, kichco);
+        // console.log(results)
+
         return res.json(results);
     } catch (err) {
         console.log(err);
