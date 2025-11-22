@@ -1,5 +1,5 @@
 const { getAllCate, getAllCateBig, getCateByIdCateBig, getCateBigAndSmallByName, postCreateCateBig, putEditCateBig, deleteCateBig, postCreateCate, putEditCate, deleteCate } = require("../models/category");
-const { getAllPro, getDetaiProbyid, getProbyid } = require("../models/product");
+// const { getAllPro, getDetaiProbyid, getProbyid } = require("../models/product");
 
 exports.getAllCategory = async (req, res) => {
     const results = await getAllCate();

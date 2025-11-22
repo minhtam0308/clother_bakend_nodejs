@@ -34,14 +34,14 @@ exports.GetOrdersData = async (req, res) => {
         const stats = await getOrdersData();
         for (const values of stats) {
             let monthTemp = new Date(values.ngay_lap).getMonth() + 1;
-            if (values.trangthai === 'da_giao') {
-                ordersData[(monthTemp - (month - 5)) % 12].completed = values.soluong;
+            if (values.trangthai === 'da_giao' || values.trangthai === 'hoan_thanh' || values.trangthai === 'da_xac_nhan') {
+                ordersData[(monthTemp - (month - 5)) % 12].completed += values.soluong;
             } else if (values.trangthai === 'cho_xu_ly') {
                 //returned = cho_xu_ly
-                ordersData[(monthTemp - (month - 5)) % 12].returned = values.soluong;
+                ordersData[(monthTemp - (month - 5)) % 12].returned += values.soluong;
 
             } else if (values.trangthai === 'huy') {
-                ordersData[(monthTemp - (month - 5)) % 12].cancelled = values.soluong;
+                ordersData[(monthTemp - (month - 5)) % 12].cancelled += values.soluong;
             }
         }
         // console.log(ordersData)

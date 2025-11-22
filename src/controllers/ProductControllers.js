@@ -1,5 +1,5 @@
 const { getCateById } = require("../models/category");
-const { getAllPro, getDetaiProbyid, getProbyid, getProbycate, getProbyname, postCreatePro, postCreateProDetail, putEditPro, delPro, putEditProDetail, delProDetail, getAllProClient, getSumProapi } = require("../models/product");
+const { getAllPro, getDetaiProbyid, getProbyid, getProbycate, getProbyname, postCreatePro, postCreateProDetail, putEditPro, delPro, putEditProDetail, delProDetail, getAllProClient, getSumProapi, getInforProToBuy } = require("../models/product");
 
 exports.getAllProducts = async (req, res) => {
     const results = await getAllPro();
@@ -321,6 +321,21 @@ exports.getSumProduct = async (req, res) => {
     }
     try {
         const [results] = await getSumProapi(masp, mausac, kichco);
+        // console.log(results)
+
+        return res.json(results);
+    } catch (err) {
+        console.log(err);
+        return res.status(500);
+    }
+
+};
+
+exports.GetInforProToBuy = async (req, res) => {
+    const { mabt } = req.query;
+
+    try {
+        const [results] = await getInforProToBuy(mabt);
         // console.log(results)
 
         return res.json(results);

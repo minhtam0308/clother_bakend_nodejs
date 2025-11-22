@@ -135,6 +135,61 @@ const getSumProapi = async (masp, mausac, kichco) => {
 
 };
 
+const getSoluongPro = async (mabt) => {
+    try {
+        const [product] = await db.query(`
+        SELECT soluong_trongkho 
+        FROM sanphambt
+        WHERE mabt=${mabt};
+        `);
+        return product;
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
+const putEditProSoluong = async (mabt, soluong) => {
+    try {
+        const [product] = await db.query(`
+        UPDATE sanphambt 
+        SET soluong_trongkho=${soluong}
+        WHERE mabt=${mabt}
+        `);
+        return product.insertId;
+    } catch (e) {
+        console.log(e);
+    }
+
+};
+
+const getInforProToBuy = async (mabt) => {
+    // console.log(idUser);
+    try {
+        const [proInf] = await db.query(`
+        SELECT 
+            sbt.mabt,
+            s.masp,
+            s.tensp,
+            s.hinhanh,
+            s.gia,
+            s.mota_sanpham,
+            s.phantram_khuyenmai,
+            sbt.kich_co,
+            sbt.mausac,
+            sbt.soluong_trongkho
+        FROM sanphambt sbt 
+        LEFT JOIN sanpham s ON s.masp = sbt.masp
+        WHERE sbt.mabt = ${mabt};
+        `);
+        return proInf;
+
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
 module.exports = {
     getAllPro, getDetaiProbyid,
     getProbyid, getProbycate,
@@ -143,5 +198,7 @@ module.exports = {
     putEditPro, delPro,
     putEditProDetail,
     delProDetail,
-    getAllProClient, getSumProapi
+    getAllProClient, getSumProapi,
+    getSoluongPro, putEditProSoluong,
+    getInforProToBuy
 }

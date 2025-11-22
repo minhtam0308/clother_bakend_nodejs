@@ -69,10 +69,38 @@ const deleteFromCart = async (idCart) => {
     return cart;
 }
 
+const getNumberCart = async (idUser) => {
+    const [cart] = await db.query(`
+        SELECT COUNT(*) as number
+        FROM giohang
+        where id_user = ${idUser}
+        GROUP BY id_user
+        `);
+
+    return cart;
+}
+
+const deleteAllCart = async (idUser) => {
+    try {
+        const [cart] = await db.query(`
+        DELETE FROM giohang
+        WHERE id_user  = ${idUser}; 
+        `);
+
+        return cart;
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
+
 module.exports = {
     postAddCart,
     getAllCart,
     putNumberCart,
     getInforInCart,
-    deleteFromCart
+    deleteFromCart,
+    getNumberCart,
+    deleteAllCart
 }

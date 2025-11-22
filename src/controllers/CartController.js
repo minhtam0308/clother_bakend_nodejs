@@ -1,4 +1,4 @@
-const { postAddCart, getAllCart, putNumberCart, getInforInCart, deleteFromCart } = require("../models/cart");
+const { postAddCart, getAllCart, putNumberCart, getInforInCart, deleteFromCart, getNumberCart } = require("../models/cart");
 
 // Cart hơi không bảo mật :))
 exports.PostAddCart = async (req, res) => {
@@ -65,6 +65,16 @@ exports.DeleteFromCart = async (req, res) => {
             EC: 0,
             EM: results
         });
+    } catch (err) {
+        return res.status(500);
+    }
+}
+
+exports.GetNumberCart = async (req, res) => {
+    try {
+        const [results] = await getNumberCart(req.user.id.makh);
+        // console.log(results)
+        return res.json(results);
     } catch (err) {
         return res.status(500);
     }

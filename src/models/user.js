@@ -76,6 +76,16 @@ const deleteUser = async (id) => {
     return user;
 };
 
+const updateNumberPhone = async (idUser, phone) => {
+    const [user] = await db.query(`
+        UPDATE user
+        SET so_dienthoai = '${phone}'
+        WHERE makh = ${idUser};      
+    `);
+
+    return user;
+}
+
 module.exports = {
     getUser,
     postUser,
@@ -83,5 +93,6 @@ module.exports = {
     putUpLevelUser,
     putEditBanUser,
     deleteUser,
-    getUserByid
+    getUserByid,
+    updateNumberPhone
 }

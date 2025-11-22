@@ -5,6 +5,8 @@ const routeProduct = require("./routes/productRoute");
 const routeCate = require("./routes/cateRoute");
 const routeCart = require("./routes/cartRoute");
 const routeStat = require("./routes/statRoute");
+const routeOrder = require("./routes/orderRoute");
+const routeKhuyenMai = require("./routes/khuyenMaiRoute");
 const { login } = require("./controllers/authController");
 const authMiddleware = require("./middlewares/authMiddleware");
 const app = express();
@@ -23,6 +25,8 @@ app.use("/api/pro", routeProduct);
 app.use("/api/cate", routeCate);
 app.use("/api/cart", routeCart);
 app.use("/api/stat", routeStat);
+app.use("/api/order", routeOrder);
+app.use("/api/khuyenmai", routeKhuyenMai);
 
 
 
