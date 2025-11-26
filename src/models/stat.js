@@ -7,7 +7,7 @@ const getTotalRevenue = async () => {
             SELECT SUM(thanh_tien) as total, ngay_lap
             FROM chi_tiet_don_hang ct
             INNER JOIN donhang dh ON ct.ma_dh = dh.ma_dh
-            WHERE ct.trangthai = 'da_giao'
+            WHERE ct.trangthai = 'hoan_thanh'
             AND ngay_lap >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
             GROUP BY DATE_FORMAT(ngay_lap, '%Y-%m')
             ORDER BY ngay_lap;
