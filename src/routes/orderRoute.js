@@ -4,6 +4,7 @@ const CategoryController = require("../controllers/OrderController");
 
 router.get("/getLastOrder", CategoryController.GetLastOder)
 router.get("/getAllOrder", CategoryController.GetAllOrder)
+router.get("/getAllOrderByUser", CategoryController.GetAllOrderByIdUser)
 
 router.post("/postOrder", CategoryController.PostCreateOrder)
 router.delete("/deleteAllCart", CategoryController.DeleteAllCart)

@@ -1,6 +1,6 @@
 const { deleteAllCart } = require("../models/cart");
 const { putKhuyenmai, CheckKhuyenMai } = require("../models/khuyenmai");
-const { getLastOder, postOrder, postOrderDetail, getAllOrder, getDetailByIdOrder, putOrder } = require("../models/order");
+const { getLastOder, postOrder, postOrderDetail, getAllOrder, getDetailByIdOrder, putOrder, getAllOrderByIdUser } = require("../models/order");
 const { getSoluongPro, putEditProSoluong } = require("../models/product");
 const { getUserByid, updateNumberPhone } = require("../models/user");
 
@@ -160,3 +160,49 @@ const fixStatusreverst = (status) => {
         return "da_xac_nhan";
     }
 }
+
+
+exports.GetAllOrderByIdUser = async (req, res) => {
+    try {
+
+        const allorder = await getAllOrderByIdUser(req.user.id.makh);
+
+        let result = [];
+        for (let item of allorder) {
+            let varTemp = {
+                id: item.ma_dh,
+                customerName: item.tennguoinhan,
+                phone: item.so_dienthoai,
+                email: item.email,
+                address: item.diachi,
+                status: fixStatus(item.trangthai),
+                paymentMethod: item.phuongthuc,
+                createdAt: formatDate(item.ngay_lap),
+                giamgia: item.giamgia,
+                diachi: item.noi_giao
+            }
+            let detail = await getDetailByIdOrder(item.ma_dh);
+            let items = []
+            detail.map((val) => {
+                items.push({
+                    id: val.mabt,
+                    name: val.tensp,
+                    size: val.size,
+                    color: val.color,
+                    quantity: val.soluong,
+                    price: val.don_gia,
+                    image: val.anh
+                },)
+            })
+            varTemp.items = items;
+            result.push(varTemp);
+        }
+
+        return res.json(result);
+    } catch (e) {
+        return res.json("Lỗi");
+
+    }
+
+
+};

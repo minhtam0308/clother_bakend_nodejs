@@ -72,11 +72,25 @@ const putOrder = async (iddh, trangthai) => {
 
 };
 
+const getAllOrderByIdUser = async (idUser) => {
+    const [order] = await db.query(`
+            SELECT dh.ma_dh, dh.tennguoinhan, u.so_dienthoai, u.email, dh.noi_giao, ct.trangthai, dh.phuongthuc, dh.ngay_lap, dh.giamgia, dh.noi_giao
+            FROM donhang dh
+            INNER JOIN chi_tiet_don_hang ct 
+            ON dh.ma_dh = ct.ma_dh
+            INNER JOIN user u ON u.makh = dh.makh
+            WHERE u.makh = ${idUser}
+            GROUP BY dh.ma_dh, dh.tennguoinhan, u.so_dienthoai, u.email, dh.noi_giao, ct.trangthai, dh.phuongthuc, dh.ngay_lap, dh.giamgia, dh.noi_giao
+        `);
+
+    return order;
+};
+
 module.exports = {
     getLastOder,
     postOrder,
     postOrderDetail,
     getAllOrder,
     getDetailByIdOrder,
-    putOrder
+    putOrder, getAllOrderByIdUser
 }
