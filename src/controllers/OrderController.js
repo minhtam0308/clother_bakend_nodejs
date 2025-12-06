@@ -20,7 +20,13 @@ exports.GetLastOder = async (req, res) => {
 exports.PostCreateOrder = async (req, res) => {
     const { ma_km, tennguoinhan, giamgia, so_dienthoai, noi_giao, list } = req.body;
     try {
-
+        const [getInforUser] = await getUserByid(req.user.id.makh);
+        if (getInforUser.status === 0) {
+            return res.json({
+                EC: 2,
+                EM: "Tài khoản của bạn đã bị cấm liên hệ admin để mở lại"
+            });
+        }
         const createOder = await postOrder(req.user.id.makh, ma_km, noi_giao, giamgia, tennguoinhan);
         // console.log(createOder.insertId);
         for (const item of list) {

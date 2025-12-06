@@ -124,7 +124,7 @@ exports.getProductsByName = async (req, res) => {
 };
 exports.postCreateProduct = async (req, res) => {
     let { tensp, hinhanh, gia, mota_sanpham, phantram_khuyenmai, ma_dmc } = req.body;
-    // console.log(req)
+    // console.log(req.body)
     if (!tensp || !gia || !ma_dmc) {
         return res.status(200).json({
             EC: 1,
@@ -173,8 +173,8 @@ exports.postCreateProductDetail = async (req, res) => {
 
 };
 exports.putEditProduct = async (req, res) => {
-    let { id, name, category, description, price, image } = req.body;
-    // console.log("asdasdasd")
+    let { id, name, category, description, price, image, khuyenmai } = req.body;
+    // console.log(khuyenmai);
     if (!name || !category || !price || !id) {
         return res.status(200).json({
             EC: 1,
@@ -189,7 +189,7 @@ exports.putEditProduct = async (req, res) => {
     }
 
     try {
-        const results = await putEditPro(id, name, category, description, price, image);
+        const results = await putEditPro(id, name, category, description, price, image, khuyenmai);
         return res.json(results);
     } catch (err) {
         console.log(err);

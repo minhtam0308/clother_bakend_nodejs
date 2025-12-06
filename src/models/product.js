@@ -69,10 +69,10 @@ const postCreateProDetail = async (masp, kich_co, mausac, soluong_trongkho, anh)
         `);
     return product.insertId;
 };
-const putEditPro = async (id, name, category, description, price, image) => {
+const putEditPro = async (id, name, category, description, price, image, khuyenmai) => {
     const [product] = await db.query(`
         UPDATE sanpham 
-    SET tensp='${name}', hinhanh='${image}', gia=${price}, mota_sanpham='${description}', ma_dmc=${category}
+    SET tensp='${name}', hinhanh='${image}', gia=${price}, mota_sanpham='${description}', ma_dmc=${category}, phantram_khuyenmai=${khuyenmai}
     WHERE masp=${id}
         `);
     return product;
